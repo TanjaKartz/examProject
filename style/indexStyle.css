@@ -1,0 +1,55 @@
+
+h1 {
+    color: black;
+    font-family: helvetica;
+    font-size: 40px;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: lighter;
+    letter-spacing: 5px;
+}
+
+#navigation {
+    text-align: center;
+    margin-right: 40px;
+}
+
+#navilist {
+    display: inline-block;
+    list-style: none;
+}
+
+#menuitem {
+    text-transform: uppercase;
+    font-family: helvetica;
+    font-size: 14px;
+    display: inline-block;
+    position: relative;
+    color: black;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    letter-spacing: 1px;
+
+}
+
+#menucolor {
+    border-top: 2px;
+    border-bottom: 2px;
+    border-right: 0px;
+    border-left: 0px;
+    border-color: black;
+    border-style: solid;
+}
+
+#table {
+    font-family: helvetica;
+    font-size: 14px;
+    text-align: left;
+    margin-top: 50px;
+}
+
+.center {
+    text-align: center;
+}
