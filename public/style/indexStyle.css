@@ -53,3 +53,8 @@ h1 {
 .center {
     text-align: center;
 }
+
+.new-item {
+  border: 1px solid #333;
+  padding: 15px;
+}
