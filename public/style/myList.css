@@ -2,13 +2,19 @@
   p {
     border: 1px solid #333;
     padding: 15px;
+    width: 600px;
+    font-family: luminari;
+  }
 
+  .new-item {
+    border: 1px solid #333;
+    padding: 15px;
+    width: 600px;
   }
 
   h2 {
       color: black;
-      font-family: helvetica;
+      font-family: luminari;
       font-size: 30px;
       letter-spacing: 1px;
     }
-  }

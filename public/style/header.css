@@ -1,7 +1,8 @@
 h1 {
     color: black;
-    font-family: helvetica;
-    font-size: 40px;
+    font-family: luminari;
+    font-size: 50px;
+    font-weight: 600px;
     text-align: center;
     text-transform: uppercase;
     font-weight: lighter;
@@ -20,7 +21,7 @@ h1 {
 
 #menuitem {
     text-transform: uppercase;
-    font-family: helvetica;
+    font-family: luminari;
     font-size: 14px;
     display: inline-block;
     position: relative;
@@ -43,7 +44,7 @@ h1 {
 }
 
 #table {
-    font-family: helvetica;
+    font-family: luminari;
     font-size: 14px;
     text-align: left;
     margin-top: 50px;
@@ -51,9 +52,4 @@ h1 {
 
 .center {
     text-align: center;
-}
-
-.new-item {
-  border: 1px solid #333;
-  padding: 15px;
 }
