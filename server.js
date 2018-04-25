@@ -31,7 +31,12 @@ app.post('/myList', function(req, res, next) {
   res.send();
 
 });
+//To remove an item from the list - does not work
+app.put('/myList/remove', function(req, res, next) {
+  myList.push(req.body.newItem);
+  res.send();
 
+});
 //3000 is a port number
 //listen is a function, the first arguement is 3000, the second arguement is the function
 // once the portal is done starting up it will call the function
