@@ -1,17 +1,4 @@
 
-  p {
-    border: 1px solid #333;
-    padding: 15px;
-    width: 800px;
-    font-family: luminari;
-  }
-
-  .new-item {
-    border: 1px solid #333;
-    padding: 15px;
-    width: 800px;
-  }
-
   h2 {
       color: black;
       text-transform: uppercase;
@@ -21,11 +8,36 @@
       letter-spacing: 1px;
     }
 
+
+  h3 {
+    border: 1px solid #333;
+    padding: 15px;
+    width: 800px;
+    font-family: luminari;
+    font-size: 15px;
+  }
+
+  .newitem {
+    border: 1px solid #333;
+    padding: 15px;
+    width: 740px;
+  }
+
+.add {
+  padding: 15px;
+}
+
   #mylist {
     float: left;
     padding-left:20px;
+    margin-top: 20px;
+    margin-left: 20px;
   }
 
   .btn {
     float: right;
   }
+
+  body {
+      background-color: #f5f5f5;
+        }

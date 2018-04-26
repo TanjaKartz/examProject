@@ -26,6 +26,7 @@ h1 {
 #menuitem {
     text-transform: uppercase;
     font-family: luminari;
+    font-style: italic;
     font-size: 25px;
     color: white;
     display: block;
@@ -39,11 +40,21 @@ h1 {
     float: left;
     background-color: silver;
     padding: 30px;
-    height: 500px;
+    height: 600px;
     border: groove;
 
 }
 
 .center {
+    text-align: center;
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: grey;
+    color: white;
     text-align: center;
 }

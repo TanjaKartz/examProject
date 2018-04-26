@@ -84,18 +84,20 @@
   <div id="mylist">
     <h2> MY LIST </h2>
 
-    <div class="new-item">
-      <input type="text" size="40" ng-model="newItem" placeholder="Add a song">
-      <button type="button" size="40" ng-click="submitNewItem()">Add</button>
+    <div>
+      <input class="newitem" type="text" size="40" ng-model="newItem" placeholder="Add a song">
+      <button class="add" type="button" size="40" ng-click="submitNewItem()">Add</button>
     </div>
-    <p ng-repeat="items in myList">
+    <h3 ng-repeat="items in myList">
       {{ items }}
       <!--ng-click becuase I am using agular-->
       <a href ng-click="remove(item)"><button class="btn"><i class="fa fa-trash"></i></button> <!--item?? is this the right one (should it be called items?)-->
-    </p>
+    </h3>
   </div>
 
   <!--myList elements-->
-
+<div class="footer">
+  <p>This website is made by Tanja Kartz Johansen: Contact information: tj@civagaard.dk</p>
+</div>
 
 </html>
