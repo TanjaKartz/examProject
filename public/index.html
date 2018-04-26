@@ -52,11 +52,12 @@
 
 </head>
 
-<body ng-controller="musicLibraryCtrl"
+<body ng-controller="musicLibraryCtrl">
   <!--header elements-->
-<div>
+
   <h1>My Music Library </h1>
-  <div id="menucolor">
+
+  <div id="menylist">
     <nav id="navigation">
       <div>
         <ul id="navilist">
@@ -67,7 +68,7 @@
             <a href="/findSongs.html">Find Songs</a>
           </li>
           <li id="menuitem">
-            <a href="/signup.html">Sing Up</a>
+            <a href="/signup.html">Sign Up</a>
           </li>
           <li id="menuitem">
             <a href="/login.html">Login</a>
@@ -76,11 +77,11 @@
       </div>
     </nav>
   </div>
-</div>
+
   <!--header elements-->
 
   <!--myList elements-->
-  <div>
+  <div id="mylist">
     <h2> MY LIST </h2>
 
     <div class="new-item">
@@ -91,9 +92,9 @@
       {{ items }}
       <!--ng-click becuase I am using agular-->
       <a href ng-click="remove(item)"><button class="btn"><i class="fa fa-trash"></i></button> <!--item?? is this the right one (should it be called items?)-->
-
     </p>
   </div>
+
   <!--myList elements-->
 
 

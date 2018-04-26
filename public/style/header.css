@@ -1,53 +1,47 @@
 h1 {
-    color: black;
+    color: white;
+    background-image: url("guitar.jpg");
     font-family: luminari;
-    font-size: 50px;
+    font-style: italic;
+    font-size: 90px;
     font-weight: 600px;
     text-align: center;
     text-transform: uppercase;
     font-weight: lighter;
-    letter-spacing: 5px;
+    letter-spacing: 6px;
+    padding-top: 60px;
+    padding-bottom: 60px;
+    margin: 0px;
+    border: groove;
+
 }
 
-#navigation {
-    text-align: center;
-    margin-right: 40px;
-}
 
 #navilist {
-    display: inline-block;
-    list-style: none;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
 
 #menuitem {
     text-transform: uppercase;
     font-family: luminari;
-    font-size: 14px;
-    display: inline-block;
-    position: relative;
-    color: black;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    letter-spacing: 1px;
-
+    font-size: 25px;
+    color: white;
+    display: block;
+    width: 250px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    text-align: center;
 }
 
-#menucolor {
-    border-top: 2px;
-    border-bottom: 2px;
-    border-right: 0px;
-    border-left: 0px;
-    border-color: black;
-    border-style: solid;
-}
+#menylist {
+    float: left;
+    background-color: silver;
+    padding: 30px;
+    height: 500px;
+    border: groove;
 
-#table {
-    font-family: luminari;
-    font-size: 14px;
-    text-align: left;
-    margin-top: 50px;
 }
 
 .center {

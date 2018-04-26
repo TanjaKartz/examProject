@@ -2,19 +2,30 @@
   p {
     border: 1px solid #333;
     padding: 15px;
-    width: 600px;
+    width: 800px;
     font-family: luminari;
   }
 
   .new-item {
     border: 1px solid #333;
     padding: 15px;
-    width: 600px;
+    width: 800px;
   }
 
   h2 {
       color: black;
+      text-transform: uppercase;
       font-family: luminari;
+      font-style: italic;
       font-size: 30px;
       letter-spacing: 1px;
     }
+
+  #mylist {
+    float: left;
+    padding-left:20px;
+  }
+
+  .btn {
+    float: right;
+  }
