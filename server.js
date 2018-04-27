@@ -4,12 +4,16 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
+//const db = require('./config/database.js') //Has to do with the database
+
 
 app.use(bodyParser.json());
 
 //lets me specify a folder out of which to serve files
 app.use(express.static('public'));
 
+
+////////////////Has to do with the list/////////////////////
 var myList = [
   'No Roots - Alice Merton',
   'Upside down - Paloma Faith',
@@ -43,3 +47,87 @@ app.put('/myList/remove', function(req, res, next) {
 app.listen(3000, function () {
   console.log('Example app lisening on port 3000!');
 });
+
+/*
+////////////////////////////////////////////////////////
+//////////Has to to with login and users///////////////////
+
+//Create the new user
+    db.User.create({
+        username,
+        password
+    })
+    .then(user => {
+        // HTTP 201 = Created
+        res.status(201).json({
+            status: 'OK',
+            message: 'User created!'
+        })
+    })
+    .catch(error => {
+        res.status(422).json({
+            status: 'ERROR',
+            message: 'Error creating user!'
+        })
+    })
+})
+
+//!!!!!!!!Rewrite this to fit my code!!!!
+
+    // Create the message and take the userId from the session
+        // Adding the userId associates the message to the user
+        db.Message.create({
+            text,
+            userId: req.session.user.id
+        }, {
+            include: [{
+                model: db.User,
+                attributes: ['username']
+            }]
+        })
+        .then(message => {
+            // Select the message again with the associated user
+            return message.reload()
+        })
+        .then(message => {
+            // Emit the newly created message to all sockets
+            io.emit('new message', message)
+
+            // Return a HTTP 201 response
+            return res.status(201).json({
+                status: 'OK',
+                message: 'Message created!'
+            })
+        })
+        .catch(error => {
+            res.status(422).json({
+                status: 'ERROR',
+                message: 'An error accured when creating message'
+            })
+        })
+    })
+
+    // Sync models to the database
+    // Note: You may want to set force to false so that
+    // data is not destroyed on server restart
+    db.sequelize.sync({ force: true }).then(() => {
+        server.listen(3000, () => {
+            db.User.create({
+                username: 'bot',
+                password: 'secret',
+                messages: [
+                    { text: 'Hello World!'},
+                    { text: 'Hello World, once again!'},
+                    { text: 'Hello?' }
+                ]
+            }, {
+                // Sequelize needs the related model to insert
+                // related models, like the messages above
+                // Documentation: http://docs.sequelizejs.com/manual/tutorial/associations.html#creating-with-associations
+                include: [ db.Message ]
+            })
+            console.log('Database is ready and server is running..')
+        })
+    })
+
+*/

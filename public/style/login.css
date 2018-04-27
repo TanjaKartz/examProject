@@ -1,7 +1,7 @@
 .loginForm {
-  margin-left: 100px;
-  margin-right: 100px;
-  margin-top: 50px;
+  margin-left: 30px;
+  margin-right: 30px;
+  margin-top: 10px;
   min-height: 100px;
   float: left;
   padding-left: 20px;
@@ -17,27 +17,26 @@ h2 {
 
 .box {
   padding: 10px;
+  width: 400px;
   font-size: 15px;
 }
 
 .login {
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-right: 181px;
-  padding-left: 181px;
+  padding: 10px;
+  width: 423px;
   font-size: 15px;
   font-family: luminari;
 }
 
 .signup {
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-right: 173px;
-  padding-left: 173px;
+  padding: 10px;
+  width: 423px;
   font-size: 15px;
   font-family: luminari;
 }
 
-body {
-  background-color: #f5f5f5;
+.singer {
+  float: left;
+  padding-left: 10px;
+  padding-top: 40px;
 }
