@@ -10,7 +10,8 @@
 h2 {
   color: black;
   font-family: georgia;
-  font-size: 30px;
+  text-transform: uppercase;
+  font-size: 25px;
   letter-spacing: 1px;
 }
 
@@ -25,7 +26,8 @@ h2 {
   padding: 10px;
   width: 423px;
   font-size: 15px;
-  font-family: luminari;
+  font-family: georgia;
+  text-transform: uppercase;
   border-radius: 5px;
 }
 
@@ -33,7 +35,8 @@ h2 {
   padding: 10px;
   width: 423px;
   font-size: 15px;
-  font-family: luminari;
+  font-family: georgia;
+  text-transform: uppercase;
   border-radius: 5px;
 }
 

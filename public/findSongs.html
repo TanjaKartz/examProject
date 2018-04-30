@@ -6,42 +6,34 @@
   <link rel="stylesheet" type="text/css" href="style/header.css">
   <link rel="stylesheet" type="text/css" href="style/findsongs.css">
 
-<script type="text/javascript">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script src="auth.js"></script>
+  <script src="search.js"></script>
+  <script src="https://apis.google.com/js/client.js?onload=googleApiClientReady"></script>
 
-function search() {
-  //clear results
-  $('#results').html('');
-  $('#buttons').html('');
-
-  //Get form input
-  q = $('#query').val();
-
-  //run GET request on API
-  $.get(
-    "GET https://www.googleapis.com/youtube/v3/search", {
-      part: 'snippet, id',
-      q: q,
-      type: 'video',
-      key:
-    }
-  )
-}
-
-</script>
 </head>
 
 <body>
-    <div id="menylist">
-        <li><a href="/home.html">Home</a></li>
-        <li><a href="/index.html">My List</a></li>
-        <li><a href="/findSongs.html">Find Songs</a></li>
-        <li><a href="/signup.html">Sign Up</a></li>
-        <li><a href="/login.html">Login</a></li>
+  <div id="menylist">
+    <li><a href="/home.html">Home</a></li>
+    <li><a href="/index.html">My List</a></li>
+    <li><a href="/findSongs.html">Find Songs</a></li>
+    <li><a href="/signup.html">Sign Up</a></li>
+    <li><a href="/login.html">Login</a></li>
+  </div>
+
+  <div class="findsongs">
+<h2>Search for a song</h2>
+    <div id="buttons">
+      <label>
+          <input class="box" placeholder='Search for a song' type="text"/>
+          <button class="search" onclick="search()">Search</button>
+        </label>
+    </div>
+    <div id="search-container">
     </div>
 
-<div class="findsongs">
-  This is where the search function should be
-</div>
+  </div>
 
 </body>
 
