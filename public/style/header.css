@@ -1,48 +1,30 @@
-h1 {
-    color: white;
-    background-image: url("guitar.jpg");
-    font-family: luminari;
-    font-style: italic;
-    font-size: 70px;
-    font-weight: 600px;
-    text-align: center;
-    text-transform: uppercase;
-    font-weight: lighter;
-    letter-spacing: 6px;
-    padding-top: 40px;
-    padding-bottom: 40px;
-    margin: 0px;
-    border: groove;
-
-}
-
-
-#navilist {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-#menuitem {
-    text-transform: uppercase;
-    font-family: luminari;
-    font-style: italic;
-    font-size: 20px;
-    color: white;
-    display: block;
-    width: 200px;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    text-align: center;
-}
 
 #menylist {
-    float: left;
-    background-color: silver;
-    padding: 20px;
-    height: 700px;
-    border: groove;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333333;
+    border: 2px solid white;
+    text-align: center;
+    text-transform: uppercase;
 
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 16px;
+    text-decoration: none;
+}
+
+li a:hover {
+    background-color: #111111;
 }
 
 .center {
@@ -54,7 +36,15 @@ h1 {
     left: 0;
     bottom: 0;
     width: 100%;
-    background-color: grey;
-    color: white;
+    list-style-type: none;
+    margin: 5px;
+    font-size: 15px;
+    padding: 10;
+    overflow: hidden;
+    background-color: #333333;
+    border: 2px solid white;
     text-align: center;
+    color: white;
+    font-family: georgia;
+
 }

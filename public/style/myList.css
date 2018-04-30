@@ -2,8 +2,7 @@
   h2 {
       color: black;
       text-transform: uppercase;
-      font-family: luminari;
-      font-style: italic;
+      font-family: georgia;
       font-size: 30px;
       letter-spacing: 1px;
     }
@@ -13,25 +12,26 @@
     border: 1px solid #333;
     padding: 15px;
     width: 800px;
-    font-family: luminari;
+    font-family: georgia;
     font-size: 15px;
+    border-radius: 5px;
   }
 
   .newitem {
     border: 1px solid #333;
     padding: 15px;
     width: 740px;
+    border-radius: 5px;
   }
 
 .add {
   padding: 15px;
+  border-radius: 5px;
 }
 
   #mylist {
     float: left;
-    padding-left:20px;
-    margin-top: 20px;
-    margin-left: 20px;
+    padding-left:60px;
   }
 
   .btn {

@@ -9,8 +9,7 @@
 
 h2 {
   color: black;
-  font-family: luminari;
-  font-style: italic;
+  font-family: georgia;
   font-size: 30px;
   letter-spacing: 1px;
 }
@@ -19,6 +18,7 @@ h2 {
   padding: 10px;
   width: 400px;
   font-size: 15px;
+  border-radius: 5px;
 }
 
 .login {
@@ -26,6 +26,7 @@ h2 {
   width: 423px;
   font-size: 15px;
   font-family: luminari;
+  border-radius: 5px;
 }
 
 .signup {
@@ -33,6 +34,7 @@ h2 {
   width: 423px;
   font-size: 15px;
   font-family: luminari;
+  border-radius: 5px;
 }
 
 .singer {
