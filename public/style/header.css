@@ -36,8 +36,9 @@ li a:hover {
     bottom: 0;
     width: 100%;
     list-style-type: none;
-    margin: 5px;
-    font-size: 15px;
+    margin-left: 5px;
+    margin-right: 5px;
+    font-size: small;
     padding: 10;
     overflow: hidden;
     background-color: #333333;
@@ -45,5 +46,4 @@ li a:hover {
     text-align: center;
     color: white;
     font-family: georgia;
-
 }

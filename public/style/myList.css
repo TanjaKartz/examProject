@@ -14,28 +14,36 @@
     width: 800px;
     font-family: georgia;
     font-size: 15px;
-    border-radius: 5px;
+    border-radius: 4px;
   }
 
   .newitem {
     border: 1px solid #333;
     padding: 15px;
-    width: 740px;
-    border-radius: 5px;
+    width: 733px;
+    border-radius: 4px;
   }
 
 .add {
   padding: 15px;
-  border-radius: 5px;
+  border-radius: 4px;
+  background-color: grey;
+  text-transform: uppercase;
 }
 
   #mylist {
     float: left;
     padding-left:60px;
+    
   }
 
   .btn {
     float: right;
+    border-radius: 4px;
+  }
+
+  .btn:hover {
+      background-color: #FF6347;
   }
 
   body {

@@ -6,6 +6,44 @@
   <link rel="stylesheet" type="text/css" href="style/header.css">
   <link rel="stylesheet" type="text/css" href="style/signup.css">
   <link rel="stylesheet" type="text/css" href="style/login.css">
+
+  <script>
+         let registerForm = document.querySelector('#registerForm')
+         let usernameField = document.querySelector('#username')
+         let passwordField = document.querySelector('#password')
+
+         registerForm.addEventListener('submit', e => {
+             e.preventDefault()
+
+             registerUser()
+         })
+
+         function registerUser() {
+             let options = {
+                 method: 'post',
+                 credentials: 'include',
+                 headers: {
+                     'content-type': 'application/json'
+                 },
+                 body: JSON.stringify({
+                     username: usernameField.value,
+                     password: passwordField.value
+                 })
+             }
+
+             fetch('/api/users', options)
+                 .then(response => response.json())
+                 .then(response => {
+                     if (response.status == 'OK') {
+                         document.location.href = './login.html'
+                     } else {
+                         alert(response.message)
+                     }
+                 })
+         }
+     </script>
+
+
 </head>
 
 <body>

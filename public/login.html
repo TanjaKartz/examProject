@@ -7,7 +7,46 @@
   <link rel="stylesheet" type="text/css" href="style/header.css">
   <script type="text/javascript" src="angular.min.js"></script>
 
+
+  <script>
+  //Javascript login (does not work)
+       let loginForm = document.querySelector('#loginForm')
+       let usernameField = document.querySelector('#username')
+       let passwordField = document.querySelector('#password')
+
+       loginForm.addEventListener('submit', e => {
+           e.preventDefault()
+
+           loginUser()
+       })
+
+       function loginUser() {
+           let options = {
+               method: 'post',
+               credentials: 'include',
+               headers: {
+                   'content-type': 'application/json'
+               },
+               body: JSON.stringify({
+                   username: usernameField.value,
+                   password: passwordField.value
+               })
+           }
+
+           fetch('/api/auth', options)
+               .then(response => response.json())
+               .then(response => {
+                   if (response.status == 'OK') {
+                       document.location.href = './'
+                   } else {
+                       alert(response.message)
+                   }
+               })
+       }
+   </script>
 </head>
+
+
 
 <body>
     <div id="menylist">
@@ -29,6 +68,10 @@
 
   </body>
 </body>
+
+<div>
+    <IMG class="loginpic" SRC="pictures/login.jpg" ALT="noder" WIDTH=300 HEIGHT=300>
+</div>
 
 <div class="footer">
   <p>This website is made by Tanja Kartz Johansen: Contact information: tj@civagaard.dk</p>

@@ -33,6 +33,7 @@
           getItems(); //this will refresh the list when adding a new item
         });
       };
+
 //to make the list item show up without having to refresh
       function getItems() {
         //response is a callback function, that is called when you succesfully get the list from the server. //this is done because you don't want the rest rest of the code to run before this is done. //http is a service. //.get is a function in that service. It calls the route 'list' and gets stuff. //it has another thing called a promise (then), which is like a string of functions. its a way to specify a callback. //what I just made here is called an API
@@ -84,5 +85,4 @@
 <div class="footer">
   <p>This website is made by Tanja Kartz Johansen: Contact information: tj@civagaard.dk</p>
 </div>
-
 </html>

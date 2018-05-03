@@ -35,9 +35,10 @@ app.post('/myList', function(req, res, next) {
   res.send();
 
 });
+
 //To remove an item from the list - does not work
 app.put('/myList/remove', function(req, res, next) {
-  myList.push(req.body.newItem);
+  myList.push(req.body.item);
   res.send();
 
 });
@@ -48,9 +49,12 @@ app.listen(3000, function () {
   console.log('Example app lisening on port 3000!');
 });
 
+
+
+
 /*
 ////////////////////////////////////////////////////////
-//////////Has to to with login and users///////////////////
+//////////Has to do with login and users///////////////////
 
 //Create the new user
     db.User.create({
