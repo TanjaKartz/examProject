@@ -7,43 +7,6 @@
   <link rel="stylesheet" type="text/css" href="style/header.css">
   <script type="text/javascript" src="angular.min.js"></script>
 
-
-  <script>
-  //Javascript login (does not work)
-       let loginForm = document.querySelector('#loginForm')
-       let usernameField = document.querySelector('#username')
-       let passwordField = document.querySelector('#password')
-
-       loginForm.addEventListener('submit', e => {
-           e.preventDefault()
-
-           loginUser()
-       })
-
-       function loginUser() {
-           let options = {
-               method: 'post',
-               credentials: 'include',
-               headers: {
-                   'content-type': 'application/json'
-               },
-               body: JSON.stringify({
-                   username: usernameField.value,
-                   password: passwordField.value
-               })
-           }
-
-           fetch('/api/auth', options)
-               .then(response => response.json())
-               .then(response => {
-                   if (response.status == 'OK') {
-                       document.location.href = './'
-                   } else {
-                       alert(response.message)
-                   }
-               })
-       }
-   </script>
 </head>
 
 
@@ -57,14 +20,17 @@
         <li><a href="/login.html">Login</a></li>
     </div>
 
-  <div class="loginForm">
+<div class="loginForm">
     <h2>LOGIN</h2>
-    <input class="box" type="text" placeholder="Username">
+<form id="login-form">
+    <input class="box" type="text" id="username-input" placeholder="Username">
     <br><br>
-    <input class="box" type="password" placeholder="Password">
+    <input class="box" type="password" id="password-input" placeholder="Password">
     <br><br>
-    <button class="login" type="button" ng-click="submitSignup()">LOGIN</button>
-  </div>
+    <input class="login" type="submit" id="login button" value="send">
+  <!--  <button  type="button" ng-click="submitSignup()">LOGIN</button>-->
+</form>
+</div>
 
   </body>
 </body>
@@ -76,5 +42,54 @@
 <div class="footer">
   <p>This website is made by Tanja Kartz Johansen: Contact information: tj@civagaard.dk</p>
 </div>
+
+
+
+  <script>
+  //Javascript login (does not work)
+       let loginForm = document.querySelector('#login-form')
+       let usernameField = document.querySelector('#username-input')
+       let passwordField = document.querySelector('#password-input')
+
+       loginForm.addEventListener('submit', log => {
+           log.preventDefault()
+
+           loginUser()
+       })
+
+       function loginUser() {
+           //Set the options for the fetch() method
+           //parameters documentation: https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#
+           let options = {
+               method: 'post',
+               credentials: 'include',
+               headers: {
+                   'content-type': 'application/json'
+               },
+               body: JSON.stringify({
+                   username: usernameField.value,
+                   password: passwordField.value
+               })
+           }
+
+           //fetching end point and getting response
+           //second parameter of fetch method (options): Allows control different settings.
+           //fetch method with 2 parameters: path to resource we want to fetch and init object options
+           fetch('/api/auth', options)
+               //return the promise that fetch returns
+               .then(response => response.json())
+               //return promise that validate status
+               .then(response => {
+                   if (response.status == 'OK') {
+                     //and redirect user to new page
+                       document.location.href = './home.html'
+                   } else {
+                       alert(response.message)
+                   }
+               })
+       }
+   </script>
+
+
 
 </html>

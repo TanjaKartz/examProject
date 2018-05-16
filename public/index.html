@@ -5,51 +5,12 @@
 <head>
   <title>Music Library</title>
   <link rel="stylesheet" type="text/css" href="style/header.css">
-  <!--myList elements-->
-  <link rel="stylesheet" type="text/css" href="style/mylist.css">
+  <link rel="stylesheet" type="text/css" href="style/list.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <script type="text/javascript" src="angular.min.js"></script>
+<!--  <script type="text/javascript" src="angular.min.js"></script>
+  <script type="text/javascript" src="list.js"></script> -->
 <!--<script type="text/javascript" src="angular-route.js"> //is used to link between pages</script>-->
-  <script type="text/javascript">
-    var app = angular.module('musicLibrary', []); //ngRoute is a dependency
 
-//Between where you initialize controller and before you initialize the app, you have to to the following:
-
-    //in order to call it from the frontend I have to do what's called inject. Scope is another angular service, containing some functionality. We are using scope to diplay data on the front
-    //http makes get request to server, which will give me the array of the items on the list
-    app.controller('musicLibraryCtrl', function($scope, $http) {
-
-//function to post the data
-//I'm doing http.post to the route I am going to which is myList. The socond argument to post is the object newItem: $scope.newMeow
-      $scope.submitNewItem = function() { //when clicking submit it is gonna call this function
-        $http.post('/myList', {newItem: $scope.newItem}).then(function() { //its gonna send a post request to the server with the new item
-          getItems(); //this will refresh the list when adding a new item
-          $scope.newItem = ''; //this will make the text field be empty after I post an item
-        });
-      };
-//we are calling scope.delete because we are calling it from the frontend
-      $scope.removeItem = function(deletethisitem) {
-        $http.put('/myList/remove', {item: deletethisitem}).then(function() { //its gonna send a post request to the server with the new item
-          getItems(); //this will refresh the list when adding a new item
-        });
-      };
-
-//to make the list item show up without having to refresh
-      function getItems() {
-        //response is a callback function, that is called when you succesfully get the list from the server. //this is done because you don't want the rest rest of the code to run before this is done. //http is a service. //.get is a function in that service. It calls the route 'list' and gets stuff. //it has another thing called a promise (then), which is like a string of functions. its a way to specify a callback. //what I just made here is called an API
-        $http.get('/myList').then(function(response) {
-
-          //setting the list with what we get back from the server
-          $scope.myList = response.data;
-        });
-      }
-//call getItems when the page starts up, and it will load all of them
-      getItems();
-
-
-    });
-  </script>
-  <!--myList elements-->
 
 </head>
 
@@ -70,18 +31,105 @@
   <div id="mylist">
     <h2> MY LIST </h2>
 
+    <!-- shopping list form -->
+     <form id="song-list">
+       <input class="newitem" type="text" size="40" id="add-songs" value="" placeholder="Add a song" required>
+       <input class="add" type="submit" size="40" id="send-song" value="Add">
+     </form>
+
+    <!-- items list -->
+        <ul class="itemList" id="songList">
+          <li class="newItem"> No Roots - Alice Merton </li>
+          <br>
+          <li class="newItem"> Upside down - Paloma Faith </li>
+        </ul>
+</div>
+
+
+<!--
     <div>
       <input class="newitem" type="text" size="40" ng-model="newItem" placeholder="Add a song">
       <button class="add" type="button" size="40" ng-click="submitNewItem()">Add</button>
     </div>
     <h3 ng-repeat="items in myList">
       {{ items }}
-      <!--ng-click becuase I am using agular-->
-      <a href ng-click="remove(item)"><button class="btn"><i class="fa fa-trash"></i></button> <!--item?? is this the right one (should it be called items?)-->
+
+      <a href ng-click="remove(item)"><button class="btn"><i class="fa fa-trash"></i></button> item?? is this the right one (should it be called items?)
     </h3>
   </div>
+-->
 
   <!--myList elements-->
+
+  <script>
+
+    //selecting ingredients form
+    let listForm = document.querySelector('#song-list')
+    let songInput = document.querySelector('#add-songs')
+    let listButton = document.querySelector('#send-song')
+
+    //adding eventListener for shopping list
+    listForm.addEventListener('submit', list => {
+      list.preventDefault()
+
+      addItem()
+    })
+
+  //(H) get all items for the specific list
+  //function to display songs in list
+  function getList(items) {
+    fetch('/api/list/:id')
+    .then(response => response.json())
+    .then(items => {
+      //creating a new element
+      let newItem = document.createElement('li')
+      //adding input value to new element
+      newItem.innerHTML = songInput.value
+      //selecting where item should be added in lists
+      let listItem = document.querySelector('#songList')
+      //appending value to list
+      listItem.appendChild(newItem)
+    })
+  }
+
+  //function to post item in API-database
+  function addItem(items) {
+    //Set the options for the fetch() method
+    //parameters documentation: https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#
+    let options = {
+          method: 'post', //post because we have to send ingredients in input
+          credentials: 'include',
+          headers: {
+              'content-type': 'application/json'
+          },
+          body: JSON.stringify({
+              tile: songInput.value
+          })
+      }
+    //fetching end point and getting response
+    //second parameter of fetch method (options): Allows control different settings.
+    //fetch method with 2 parameters: path to resource we want to fetch and init object options
+    fetch('/api/list', options)
+        //return the promise that fetch returns
+        .then(response => response.json())
+        //return promise that validate status
+        .then(response => {
+              if (response.status == 'OK') {
+              console.log('song is added')
+              //calling frontend function
+              getList(items)
+              //document.location.href = './userpage'
+              } else {
+              //or send error message
+              alert(response.message)
+            }
+        })
+  }
+
+  </script>
+
+</body>
+
 <div class="footer">
   <p>This website is made by Tanja Kartz Johansen: Contact information: tj@civagaard.dk</p>
 </div>
