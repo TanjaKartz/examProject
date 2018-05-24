@@ -1,7 +1,7 @@
 //This is backend stuff (node module and server.js is both backend)
 //not to self: Remember that I need to somehow(!!!!) implement socket.io, which allows for real-time to happen
 
-//NEW STUFF
+
 // Load Express framework module
 const express = require('express')
 
@@ -32,6 +32,25 @@ const expressSession = session({
 // Use the settings above
 app.use(expressSession)
 
+///////////////////////////////////////////////////
+//lets me specify a folder out of which to serve files
+/////////////////////////////////////////////////////
+app.use(express.static('public'));
+
+///////////////////////////////////////////////////////
+// Authentication middleware
+const userIsAuthenticated = (req, res, next) => {
+  if (!req.session.user) {
+    return res.json({
+      status: 'ERROR',
+      message: 'Authentication required!'
+    })
+  }
+  next()
+}
+
+
+/////////////REAL TIEM FEATURE NEEDS TO BE INPLEMENTED/////////////////
 // Load Socket.io to support real-time features
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
@@ -41,7 +60,6 @@ const ioSession = require('express-socket.io-session')
 io.use(ioSession(expressSession, {
   autoSave: true
 }))
-
 
 // Stuff to do when a user (socket) connects to the site
 io.on('connection', socket => {
@@ -64,7 +82,6 @@ io.on('connection', socket => {
     }
   })
 
-
   // If the user is logged in
   if (user) {
     // Check if the user is already on the list
@@ -81,24 +98,13 @@ io.on('connection', socket => {
   io.emit('online users', onlineUsers)
 
 })
-
-//lets me specify a folder out of which to serve files
-app.use(express.static('public'));
-
-// Authentication middleware
-const requireAuthentication = (req, res, next) => {
-  if (!req.session.user) {
-    return res.json({
-      status: 'ERROR',
-      message: 'Authentication required!'
-    })
-  }
-  next()
-}
+////////////////////////////////////////////////////////
 
 
-// Manually check if user is logged in
-// If not, redirect to login.html
+///////////////////////////////////////////////////
+///// Manually check if user is logged in////////
+///// If not, redirect to login.html////////////
+/////////////////////////////////////////////////
 app.get('/', (req, res) => {
   // Render the main.html in the views folder
   // we can make an if statement to check if user is logged in
@@ -107,14 +113,116 @@ app.get('/', (req, res) => {
   }
 
   res.sendFile(__dirname + './public/home.html')
-  res.render('home', { title: 'Home Page' })
+  res.render('home', {
+    title: 'Home Page'
+  })
 })
 
+app.get('/login', (req, res) => {
+  res.render('login', {
+    title: 'Login'
+  })
+})
 
+app.get('/signup', (req, res) => {
+  res.render('signup', {
+    title: 'Signup'
+  })
+})
 
+app.get('/home', userIsAuthenticated, (req, res) => {
+  res.render('home', {
+    title: 'Home Page'
+  })
+})
+
+app.get('/index', userIsAuthenticated, (req, res) => {
+  res.render('index', {
+    title: 'My List'
+  })
+})
+
+//////////////////////////////////////////////////
+// Endpoint to register a new user
+//////////////////////////////////////////////////
+app.post('/api/users', (req, res) => {
+  let {
+    username,
+    password
+  } = req.body
+
+  let schema = {
+    username: Joi.string().alphanum().required(),
+    password: Joi.string().required()
+  }
+
+  const result = Joi.validate(req.body, schema)
+
+  if (result.error !== null) {
+    return res.status(422).json({
+      status: 'ERROR',
+      message: 'Validation failed'
+    })
+  }
+
+  ////////////////////////////////////////////////////
+  ///////// Creating new user intp database///////////
+  db.User.create({
+      username,
+      password
+    })
+    .then(user => {
+      // HTTP 201 = Created
+      res.status(201).json({
+        status: 'OK',
+        message: 'User created!'
+      })
+    })
+    .catch(error => {
+      res.status(422).json({
+        status: 'ERROR',
+        message: 'Error creating user!'
+      })
+    })
+
+  ///////////////////////////////////////////
+  //db.List.create////////////
+
+  db.List.create({
+      title: "My List",
+      userId: req.session.user.id
+    }) //husk at sidste parantes ikke skal med hvis nedstående skal inkluderes
+    /*, {
+      include: [{
+        model: db.User,
+        attributes: ['username']
+      }] */
+    })
+
+    .then(list => {
+      // Return a HTTP 201 response
+      res.status(201).json({
+        status: 'OK',
+        message: 'You have created a list!'
+      })
+    })
+    .catch(error => {
+      //item was not created
+      res.status(422).json({
+        status: 'ERROR',
+        message: 'An error accured'
+      })
+    })
+})
+
+///////////////////////////////////////////////////////
 // Endpoint to handle user authentication
+///////////////////////////////////////////////////////
 app.post('/api/auth', (req, res) => {
-  let {username, password} = req.body
+  let {
+    username,
+    password
+  } = req.body
 
   // Make sure username and password are present
   let schema = {
@@ -176,204 +284,108 @@ app.post('/api/auth', (req, res) => {
     })
 })
 
+///////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////
 // Endpoint to destroy the session's data
-app.get('/api/auth/logout', (req, res) => {
-  req.session.destroy()
+/////////////////////////////////////////////////
+app.get('/api/auth/logout', userIsAuthenticated, (req, res) => {
+req.session.destroy()
 
-  res.redirect('/')
+res.redirect('/')
 })
 
-// Endpoint to register a new user
-app.post('/api/users', (req, res) => {
-  let {username, password } = req.body
 
-  let schema = {
-    username: Joi.string().alphanum().required(),
-    password: Joi.string().required()
-  }
-
-  const result = Joi.validate(req.body, schema)
-
-  if (result.error !== null) {
-    return res.status(422).json({
-      status: 'ERROR',
-      message: 'Validation failed'
-    })
-  }
-
-  // Create the new user
-  db.User.create({
-      username,
-      password
-    })
-    .then(user => {
-      // HTTP 201 = Created
-      res.status(201).json({
-        status: 'OK',
-        message: 'User created!'
-      })
-    })
-    .catch(error => {
-      res.status(422).json({
-        status: 'ERROR',
-        message: 'Error creating user!'
-      })
-    })
 })
-//NEW STUFF ENDS
 
-//REVISED STUFF COMING UP
+/////////////////////////////////////////////////////////
+///MAKE LIST AND ADD ITEMS
+//////////////////////////////////////////////////////
+app.get('/api/list/:id', userIsAuthenticated, (req, res) => {
 
-//how to access database from server
-//letting the server tell which are the elements in the list. I do that by using an API call
-//this is called a GET request
-app.get('/api/myList', (req, res) => { //should it be /api? why??
-  //include the user related to the list
+  // Include the List related to the items
   let options = {
     include: [{
-      model: db.User,
-      attributes: ['username'] // Only select the username column
+      model: db.List,
+      attributes: list.id // Only select list of the user
     }]
   }
 
-  db.List.findAll(options)
-    .then(myList => {
-      res.json(myList)
+  db.Item.findAll(options)
+    .then(items => {
+      res.json(items)
     })
-});
 
-//it can have the same name because it is doing something different (post instead of get)
-//Endpoint to save new data
-// Requires that the user is logged in
-//HOW TO DO THIS??????????????????
-app.post('/api/myList', requireAuthentication, (req, res) => {
-  let { text } = req.body
+})
+//posting a new song to the list
+app.post('/api/list', userIsAuthenticated, (req, res) => {
+  let {
+    titleArtist
+  } = req.body
 
-  let schema = {
-    text: Joi.string().required()
+  let user_id = req.session.user.id
+
+  // seaching for user id in database
+  let query = {
+    where: {
+      userId: user_id
+    }
   }
 
-  let result = Joi.validate(req.body, schema)
-
-  if (result.error !== null) {
-    return res.status(422).json({
-      status: 'ERROR',
-      message: 'Missing text!'
-    })
-  }
-
-db.List.create({
-  title: "My List"
-  userID: req.session.user.id
-}, {
-  include:[{
-    model: db.User,
-    attributes: ['username']
-  }]
-})
-
-.then(list => {
-    // Select the message again with the associated user
-    return list.reload()
-})
-
-.then(list => {
-        // Emit the newly created quiz result to all sockets
-        io.emit('new list', list)
-
-        // Return a HTTP 201 response
-        return res.status(201).json({
-              status: 'OK',
-              message: 'You have created a list!'
+  //searching for list from user
+  db.List.findOne(query)
+    .then(list => {
+      //cheking if list is available
+      //console.log('list found', query)
+      if (!list) {
+        return res.status(422).json({
+          status: 'ERROR',
+          message: 'No list available'
         })
+      }
+      //adding item to list
+      db.Item.create({
+        titleArtist
+      }).then(newItem => {
+        list.addItem(newItem)
+      })
+
     })
 
-    .catch(error => {
-        res.status(422).json({
-            status: 'ERROR',
-            message: 'An error accured'
-        })
+    //sending response
+    .then(item => {
+      res.status(201).json({
+        status: 'OK',
+        message: 'You have added a new item'
+      })
     })
 })
+
+/////////////////////////////////////////////////////////
+
+
 
 
 // Sync models to the database
 // Note: You may want to set force to false so that
 // data is not destroyed on server restart
-db.sequelize.sync({ force: true }).then(() => {
-    server.listen(3000, () => {
-        db.User.create({
-            username: 'bot',
-            password: 'secret',
-        }, {
-            // Sequelize needs the related model to insert
-            // related models, like the messages above
-            // Documentation: http://docs.sequelizejs.com/manual/tutorial/associations.html#creating-with-associations
-            include: [ db.List ]
-        })
-        console.log('Database is ready and server is running..')
+db.sequelize.sync({
+  force: true
+}).then(() => {
+  server.listen(3000, () => {
+    db.User.create({
+      username: 'bot',
+      password: 'secret',
+    }, {
+      // Sequelize needs the related model to insert
+      // related models, like the messages above
+      // Documentation: http://docs.sequelizejs.com/manual/tutorial/associations.html#creating-with-associations
+      include: [db.List]
     })
-})
-
-
-app.get('/api/list/:id', userIsAuthenticated, (req, res) => {
-
-// Include the List related to the items
-  let options = {
-      include: [{
-          model: db.List,
-          attributes: list.id // Only select list of the user
-      }]
-  }
-
-  db.Item.findAll(options)
-  .then(items => {
-      res.json(items)
+    console.log('Database is ready and server is running..')
   })
-
 })
-//posting a new ingredient to the list
-app.post('/api/list', userIsAuthenticated, (req, res) => {
-let { ingredient } = req.body
-
-let user_id = req.session.user.id
-
-// seaching for user id in database
-let query = {
- where: {
-   userId: user_id
- }
-}
-
-//searching for list from user --> it works!
-db.List.findOne(query)
-.then(list => {
-  //cheking if list is available --> it works and it is connected to user!!
-  //console.log('list found', query)
-  if (!list) {
-      return res.status(422).json({
-          status: 'ERROR',
-          message: 'No list available'
-      })
-  }
-  //adding item to list --> it works!!!
-  db.Item.create({
-    ingredient
-  }).then(newItem => {
-    list.addItem(newItem)
-  })
-
-})
-
-//sending response
-.then(item => {
-    res.status(201).json({
-        status: 'OK',
-        message: 'You have added a new item'
-    })
-})
-})
-
 
 
 /*

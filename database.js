@@ -31,18 +31,26 @@ db.User = sequelize.define('user', {
     }
 })
 
-db.List = sequelize.define('list')
+db.List = sequelize.define('list', {
+    title: {
+      type: Sequelize.STRING,
+      allowNull: false
+    }
+})
 
 
 db.Item = sequelize.define('item', {
-  title: {
+  titleArtist: {
     type: Sequelize.STRING,
-    allowNull: false,
-  },
+    allowNull: false
+  }
+  /*
+  ,
   artist: {
     type: Sequelize.STRING,
     allowNull: false,
   }
+  */
 })
 
 // Model associations

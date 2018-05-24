@@ -27,7 +27,7 @@
     <br><br>
     <input class="box" type="password" id="password-input" placeholder="Password">
     <br><br>
-    <input class="login" type="submit" id="login button" value="send">
+    <input class="login" type="submit" id="login button" value="Log in">
   <!--  <button  type="button" ng-click="submitSignup()">LOGIN</button>-->
 </form>
 </div>
@@ -46,7 +46,7 @@
 
 
   <script>
-  //Javascript login (does not work)
+  //Javascript login
        let loginForm = document.querySelector('#login-form')
        let usernameField = document.querySelector('#username-input')
        let passwordField = document.querySelector('#password-input')
@@ -82,7 +82,7 @@
                .then(response => {
                    if (response.status == 'OK') {
                      //and redirect user to new page
-                       document.location.href = './home.html'
+                       document.location.href = './index.html'
                    } else {
                        alert(response.message)
                    }

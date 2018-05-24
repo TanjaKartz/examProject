@@ -14,7 +14,7 @@
 
 </head>
 
-<body ng-controller="musicLibraryCtrl">
+<body>
   <!--header elements-->
 
   <div id="menylist">
@@ -68,14 +68,14 @@
     let songInput = document.querySelector('#add-songs')
     let listButton = document.querySelector('#send-song')
 
-    //adding eventListener for shopping list
+    //adding eventListener for list
     listForm.addEventListener('submit', list => {
       list.preventDefault()
 
       addItem()
     })
 
-  //(H) get all items for the specific list
+  //get all items for the specific list
   //function to display songs in list
   function getList(items) {
     fetch('/api/list/:id')
@@ -103,7 +103,7 @@
               'content-type': 'application/json'
           },
           body: JSON.stringify({
-              tile: songInput.value
+              titleArtist: songInput.value
           })
       }
     //fetching end point and getting response
@@ -118,7 +118,7 @@
               console.log('song is added')
               //calling frontend function
               getList(items)
-              //document.location.href = './userpage'
+
               } else {
               //or send error message
               alert(response.message)

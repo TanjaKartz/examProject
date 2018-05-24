@@ -25,6 +25,8 @@
   <br><br>
   <input class="box" type="password" id="passwordSignup-input" size="50" placeholder="Password">
   <br><br>
+  <input class="box" type="password" id="passwordSignup-input" size="50" placeholder="Confirm password">
+  <br><br>
 <!--  <input class="box" type="password" id="passwordSignup-input" size="50" placeholder="Confirm password">
   <br><br> -->
 <input class="signup" type="submit" id="signup-button" value="send">
@@ -74,6 +76,7 @@
         .then(response => {
           if (response.status == 'OK') {
             //and redirect user to new page
+            alert('User was created. Login and start making your playlist')
             document.location.href = './login.html'
           } else {
             //or send error message
