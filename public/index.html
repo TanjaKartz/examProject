@@ -21,14 +21,14 @@
       <li><a href="/home.html">Home</a></li>
       <li><a href="/index.html">My List</a></li>
       <li><a href="/findSongs.html">Find Songs</a></li>
-      <li><a href="/signup.html">Sign Up</a></li>
-      <li><a href="/login.html">Login</a></li>
+      <li><a href="/api/auth/logout">Logout</a></li>
+
   </div>
 
   <!--header elements-->
 
   <!--myList elements-->
-  <div id="mylist">
+<div id="mylist">
     <h2> MY LIST </h2>
 
     <!-- shopping list form -->
@@ -39,9 +39,7 @@
 
     <!-- items list -->
         <ul class="itemList" id="songList">
-          <li class="newItem"> No Roots - Alice Merton </li>
-          <br>
-          <li class="newItem"> Upside down - Paloma Faith </li>
+
         </ul>
 </div>
 
@@ -63,7 +61,7 @@
 
   <script>
 
-    //selecting ingredients form
+    //selecting form for list
     let listForm = document.querySelector('#song-list')
     let songInput = document.querySelector('#add-songs')
     let listButton = document.querySelector('#send-song')
@@ -97,7 +95,7 @@
     //Set the options for the fetch() method
     //parameters documentation: https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#
     let options = {
-          method: 'post', //post because we have to send ingredients in input
+          method: 'post', //post because we have to send song in input
           credentials: 'include',
           headers: {
               'content-type': 'application/json'

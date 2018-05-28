@@ -38,7 +38,8 @@ app.use(expressSession)
 app.use(express.static('public'));
 
 ///////////////////////////////////////////////////////
-// Authentication middleware
+// Authentication middleware --> check if user is logged inspect
+//used in methods where the user needs to be looged in to post, put and delete data.
 const userIsAuthenticated = (req, res, next) => {
   if (!req.session.user) {
     return res.json({
@@ -55,14 +56,21 @@ const userIsAuthenticated = (req, res, next) => {
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
 // Share sessions between Express and Socket.io
+/*
 const ioSession = require('express-socket.io-session')
 // Setup session sharing between Express and Socket.io
 io.use(ioSession(expressSession, {
   autoSave: true
 }))
+*/
 
 // Stuff to do when a user (socket) connects to the site
-io.on('connection', socket => {
+/*io.on('connection', socket => {
+  console.log('Socket connected', socket.id)
+  socket.emit('debug message', 'Socket connected to server!')
+
+})*/
+/*
   // Take the user object from the session
   // It contains the user's ID and username
   let {
@@ -98,6 +106,8 @@ io.on('connection', socket => {
   io.emit('online users', onlineUsers)
 
 })
+*/
+
 ////////////////////////////////////////////////////////
 
 
@@ -142,6 +152,13 @@ app.get('/index', userIsAuthenticated, (req, res) => {
   })
 })
 
+app.get('/api/allusers', (req, res) => {
+  db.User.findAll().then(users => {
+    res.json(users)
+  })
+})
+
+
 //////////////////////////////////////////////////
 // Endpoint to register a new user
 //////////////////////////////////////////////////
@@ -172,6 +189,7 @@ app.post('/api/users', (req, res) => {
       password
     })
     .then(user => {
+      /*
       // HTTP 201 = Created
       res.status(201).json({
         status: 'OK',
@@ -184,33 +202,36 @@ app.post('/api/users', (req, res) => {
         message: 'Error creating user!'
       })
     })
+*/
+      ///////////////////////////////////////////
+      //db.List.create////////////
 
-  ///////////////////////////////////////////
-  //db.List.create////////////
-
-  db.List.create({
-      title: "My List",
-      userId: req.session.user.id
-    }) //husk at sidste parantes ikke skal med hvis nedstående skal inkluderes
-    /*, {
-      include: [{
-        model: db.User,
-        attributes: ['username']
-      }] */
-    })
-
-    .then(list => {
-      // Return a HTTP 201 response
-      res.status(201).json({
-        status: 'OK',
-        message: 'You have created a list!'
-      })
-    })
-    .catch(error => {
+      db.List.create({
+        title: "My List",
+        userId: user.id
+      }).then(list => {
+        // Return a HTTP 201 response
+        return res.status(201).json({
+          status: 'OK',
+          message: 'You have created a list!'
+        })
+      }).catch(error => {
+        //item was not created
+        res.status(422).json({
+          status: 'ERROR',
+          message: 'An error occured creating list'
+        })
+      }) //husk at sidste parantes ikke skal med hvis nedstående skal inkluderes
+      /*, {
+        include: [{
+          model: db.User,
+          attributes: ['username']
+        }] */
+    }).catch(error => {
       //item was not created
       res.status(422).json({
         status: 'ERROR',
-        message: 'An error accured'
+        message: 'An error occured creating user'
       })
     })
 })
@@ -253,7 +274,7 @@ app.post('/api/auth', (req, res) => {
       if (!user) {
         return res.status(422).json({
           status: 'ERROR',
-          message: 'Invalid credentials'
+          message: 'Invalid credentials, user not found'
         })
       }
 
@@ -290,33 +311,59 @@ app.post('/api/auth', (req, res) => {
 /////////////////////////////////////////////////
 // Endpoint to destroy the session's data
 /////////////////////////////////////////////////
+
 app.get('/api/auth/logout', userIsAuthenticated, (req, res) => {
-req.session.destroy()
+  req.session.destroy()
 
-res.redirect('/')
+  res.redirect('/home')
 })
 
 
-})
+//Return shopping list items
+  app.get('/api/allitems', (req, res) => {
+    db.Item.findAll().then(items => {
+      res.json(items)
+    })
+  })
+
+  app.get('/api/alllists', (req, res) => {
+    db.List.findAll().then(lists => {
+      res.json(lists)
+    })
+  })
+
 
 /////////////////////////////////////////////////////////
 ///MAKE LIST AND ADD ITEMS
 //////////////////////////////////////////////////////
 app.get('/api/list/:id', userIsAuthenticated, (req, res) => {
-
-  // Include the List related to the items
-  let options = {
-    include: [{
-      model: db.List,
-      attributes: list.id // Only select list of the user
-    }]
+  let query = {
+    where: {
+      id: db.List.id
+    },
+    include: [
+      db.Item
+    ]
   }
 
-  db.Item.findAll(options)
-    .then(items => {
-      res.json(items)
-    })
+  db.List.findOne(query).then(list => {
+    // list.items => array of objects
+  })
 
+  /*
+    // Include the List related to the items
+    let options = {
+      include: [{
+        model: db.List,
+        attributes: list.id // Only select list of the user
+      }]
+    }
+
+    db.Item.findAll(options)
+      .then(items => {
+        res.json(items)
+      })
+  */
 })
 //posting a new song to the list
 app.post('/api/list', userIsAuthenticated, (req, res) => {
@@ -337,7 +384,7 @@ app.post('/api/list', userIsAuthenticated, (req, res) => {
   db.List.findOne(query)
     .then(list => {
       //cheking if list is available
-      //console.log('list found', query)
+      console.log('list found', query)
       if (!list) {
         return res.status(422).json({
           status: 'ERROR',
@@ -345,11 +392,15 @@ app.post('/api/list', userIsAuthenticated, (req, res) => {
         })
       }
       //adding item to list
+      return list.createItem({
+        titleArtist
+      })
       db.Item.create({
         titleArtist
       }).then(newItem => {
         list.addItem(newItem)
       })
+
 
     })
 
@@ -371,10 +422,10 @@ app.post('/api/list', userIsAuthenticated, (req, res) => {
 // Note: You may want to set force to false so that
 // data is not destroyed on server restart
 db.sequelize.sync({
-  force: true
+  force: false
 }).then(() => {
   server.listen(3000, () => {
-    db.User.create({
+    /*db.User.create({
       username: 'bot',
       password: 'secret',
     }, {
@@ -382,7 +433,7 @@ db.sequelize.sync({
       // related models, like the messages above
       // Documentation: http://docs.sequelizejs.com/manual/tutorial/associations.html#creating-with-associations
       include: [db.List]
-    })
+    })*/
     console.log('Database is ready and server is running..')
   })
 })
