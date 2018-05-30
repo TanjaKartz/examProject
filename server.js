@@ -26,7 +26,7 @@ app.use(express.json()) //do not include
 
 // Setup express-session
 const expressSession = session({
-  secret: 'examProject' //THIS I AM NOT CERTAIN OF!!!
+  secret: 'examProject'
 })
 
 // Use the settings above
@@ -51,7 +51,7 @@ const userIsAuthenticated = (req, res, next) => {
 }
 
 
-/////////////REAL TIEM FEATURE NEEDS TO BE INPLEMENTED/////////////////
+/////////////REAL TIME FEATURE NEEDS TO BE IMPLEMENTED/////////////////
 // Load Socket.io to support real-time features
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
@@ -319,8 +319,6 @@ app.post('/api/auth', (req, res) => {
 /////////////////////////////////////////////////
 // Endpoint to destroy the session's data
 /////////////////////////////////////////////////
-
-
 app.get('/api/auth/logout', (req, res) => {
   req.session.destroy()
 
@@ -374,6 +372,7 @@ app.get('/api/list/:id', userIsAuthenticated, (req, res) => {
       })
   */
 })
+
 //posting a new song to the list
 app.post('/api/list', userIsAuthenticated, (req, res) => {
   let {
@@ -428,27 +427,19 @@ app.post('/api/list', userIsAuthenticated, (req, res) => {
 
 
 // Sync models to the database
-// Note: You may want to set force to false so that
-// data is not destroyed on server restart
+// Note: You want to set force to false so that data is not destroyed on server restart
 db.sequelize.sync({
   force: false
 }).then(() => {
   server.listen(3000, () => {
-    /*db.User.create({
-      username: 'bot',
-      password: 'secret',
-    }, {
       // Sequelize needs the related model to insert
-      // related models, like the messages above
       // Documentation: http://docs.sequelizejs.com/manual/tutorial/associations.html#creating-with-associations
-      include: [db.List]
-    })*/
     console.log('Database is ready and server is running..')
   })
 })
 
 
-/*
+
 app.delete('api/item/:item_id', (req, res) => {
 db.Item.delete({
   where: {
@@ -456,4 +447,3 @@ db.Item.delete({
   }
 })
 })
-*/

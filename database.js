@@ -45,6 +45,8 @@ db.Item = sequelize.define('item', {
     allowNull: false
   }
   /*
+  //I could have made two fiels, one for title and one for artist
+  //but I don't know how to do that - so this will be part of my "further improvements"
   ,
   artist: {
     type: Sequelize.STRING,
