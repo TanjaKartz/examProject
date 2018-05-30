@@ -44,7 +44,7 @@ const userIsAuthenticated = (req, res, next) => {
   if (!req.session.user) {
     return res.json({
       status: 'ERROR',
-      message: 'Authentication required!'
+      message: 'Authentication required! - Login to add songs to your list'
     })
   }
   next()
@@ -56,20 +56,20 @@ const userIsAuthenticated = (req, res, next) => {
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
 // Share sessions between Express and Socket.io
-/*
+
 const ioSession = require('express-socket.io-session')
 // Setup session sharing between Express and Socket.io
 io.use(ioSession(expressSession, {
   autoSave: true
 }))
-*/
+
 
 // Stuff to do when a user (socket) connects to the site
-/*io.on('connection', socket => {
+io.on('connection', socket => {
   console.log('Socket connected', socket.id)
   socket.emit('debug message', 'Socket connected to server!')
 
-})*/
+})
 /*
   // Take the user object from the session
   // It contains the user's ID and username
@@ -118,6 +118,7 @@ io.use(ioSession(expressSession, {
 app.get('/', (req, res) => {
   // Render the main.html in the views folder
   // we can make an if statement to check if user is logged in
+
   if (!req.session.user) {
     return res.redirect('./public/login.html')
   }
@@ -128,6 +129,7 @@ app.get('/', (req, res) => {
   })
 })
 
+//don't know what this does???
 app.get('/login', (req, res) => {
   res.render('login', {
     title: 'Login'
@@ -142,13 +144,19 @@ app.get('/signup', (req, res) => {
 
 app.get('/home', userIsAuthenticated, (req, res) => {
   res.render('home', {
-    title: 'Home Page'
+  title: 'Home Page'
   })
 })
 
 app.get('/index', userIsAuthenticated, (req, res) => {
   res.render('index', {
     title: 'My List'
+  })
+})
+
+app.get('/logout', userIsAuthenticated, (req, res) => {
+  res.render('logout', {
+    title: 'Logout'
   })
 })
 
@@ -183,7 +191,7 @@ app.post('/api/users', (req, res) => {
   }
 
   ////////////////////////////////////////////////////
-  ///////// Creating new user intp database///////////
+  ///////// Creating new user into database///////////
   db.User.create({
       username,
       password
@@ -312,10 +320,11 @@ app.post('/api/auth', (req, res) => {
 // Endpoint to destroy the session's data
 /////////////////////////////////////////////////
 
-app.get('/api/auth/logout', userIsAuthenticated, (req, res) => {
+
+app.get('/api/auth/logout', (req, res) => {
   req.session.destroy()
 
-  res.redirect('/home')
+  res.redirect('/logout.html')
 })
 
 
@@ -447,17 +456,4 @@ db.Item.delete({
   }
 })
 })
-*/
-
-
-/*
-/////////////////////////////////////////////////////////////
-////////////////Has to do with the list/////////////////////
-var myList = [
-  'No Roots - Alice Merton',
-  'Upside down - Paloma Faith',
-  'Back From The Edge - James Arthur',
-  'Survivor - Destiny´s Child'
-];
-/////////////////////////////////////////////////////////
 */
