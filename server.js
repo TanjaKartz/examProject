@@ -41,6 +41,7 @@ app.use(express.static('public'));
 // Authentication middleware --> check if user is logged inspect
 //used in methods where the user needs to be looged in to post, put and delete data.
 const userIsAuthenticated = (req, res, next) => {
+  console.log(req.session)
   if (!req.session.user) {
     return res.json({
       status: 'ERROR',
@@ -63,50 +64,18 @@ io.use(ioSession(expressSession, {
   autoSave: true
 }))
 
-
+/*
 // Stuff to do when a user (socket) connects to the site
 io.on('connection', socket => {
   console.log('Socket connected', socket.id)
   socket.emit('debug message', 'Socket connected to server!')
 
 })
-/*
-  // Take the user object from the session
-  // It contains the user's ID and username
-  let {
-    user
-  } = socket.handshake.session
-
-  // When a user closes the site
-  // and therefore disconnects
-  socket.on('disconnect', () => {
-    // Check if the user is logged in
-    if (user) {
-      // Remove the users from the onlineUsers array
-      onlineUsers = onlineUsers.filter(u => u.id !== user.id)
-
-      // Emit the new list of online users
-      io.emit('online users', onlineUsers)
-    }
-  })
-
-  // If the user is logged in
-  if (user) {
-    // Check if the user is already on the list
-    // Could happen if the user uses multiple browsers
-    if (!onlineUsers.some(u => u.id == user.id)) {
-      // If user is not on the list, add the user
-      onlineUsers.push(user)
-
-      // Attach the user to the socket
-      socket.user = user
-    }
-  }
-
-  io.emit('online users', onlineUsers)
-
-})
 */
+
+
+
+
 
 ////////////////////////////////////////////////////////
 
@@ -115,19 +84,30 @@ io.on('connection', socket => {
 ///// Manually check if user is logged in////////
 ///// If not, redirect to login.html////////////
 /////////////////////////////////////////////////
-app.get('/', (req, res) => {
+app.get('/', function(req, res) {
   // Render the main.html in the views folder
   // we can make an if statement to check if user is logged in
 
-  if (!req.session.user) {
-    return res.redirect('./public/login.html')
-  }
+  //if (!req.session.user) {
+  //  return res.redirect('./public/login.html')
+  //}
 
-  res.sendFile(__dirname + './public/home.html')
-  res.render('home', {
-    title: 'Home Page'
-  })
+  res.sendFile(__dirname + './home.html');
+
+  //res.render('home', {
+  //  title: 'Home Page'
+//  })
 })
+
+io.on('connection', function(socket){
+  console.log('a user is connected');
+  socket.on('disconnect', function(){
+    console.log('user disconnected');
+  });
+});
+
+//io.emit('some event', {for:'everyone'});
+
 
 //don't know what this does???
 app.get('/login', (req, res) => {
@@ -304,6 +284,8 @@ app.post('/api/auth', (req, res) => {
             username: user.username
           }
 
+          console.log(req.session)
+
           // Send a response
           res.json({
             status: 'OK',
@@ -326,7 +308,7 @@ app.get('/api/auth/logout', (req, res) => {
 })
 
 
-//Return shopping list items
+//Return list items
   app.get('/api/allitems', (req, res) => {
     db.Item.findAll().then(items => {
       res.json(items)
@@ -343,17 +325,19 @@ app.get('/api/auth/logout', (req, res) => {
 /////////////////////////////////////////////////////////
 ///MAKE LIST AND ADD ITEMS
 //////////////////////////////////////////////////////
-app.get('/api/list/:id', userIsAuthenticated, (req, res) => {
+app.get('/api/list', userIsAuthenticated, (req, res) => {
   let query = {
     where: {
-      id: db.List.id
+      id: req.session.user.id
     },
     include: [
       db.Item
     ]
   }
 
+
   db.List.findOne(query).then(list => {
+    res.json(list)
     // list.items => array of objects
   })
 
@@ -400,13 +384,20 @@ app.post('/api/list', userIsAuthenticated, (req, res) => {
         })
       }
       //adding item to list
-      return list.createItem({
+    /*list.createItem({
+
         titleArtist
-      })
+      })*/
       db.Item.create({
         titleArtist
       }).then(newItem => {
         list.addItem(newItem)
+      }).catch(error => {
+        //item was not created
+        res.status(422).json({
+          status: 'ERROR',
+          message: 'An error occured creating item'
+        })
       })
 
 

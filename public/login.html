@@ -76,6 +76,7 @@
                .then(response => response.json())
                //return promise that validate status
                .then(response => {
+                 console.log(response)
                    if (response.status == 'OK') {
                      //and redirect user to new page
                      alert('Welcome! Start making your list of favorite songs')

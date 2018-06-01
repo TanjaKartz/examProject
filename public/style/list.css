@@ -17,11 +17,20 @@
     border-radius: 4px;
   }
 
+  .inputBar {
+    border: 1px solid #333;
+    padding: 15px;
+    width: 733px;
+    border-radius: 4px;
+  }
+
   .newitem {
     border: 1px solid #333;
     padding: 15px;
     width: 733px;
     border-radius: 4px;
+    width: 100%;
+    margin: 5px;
   }
 
 .add {

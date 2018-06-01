@@ -36,12 +36,15 @@
      </form>
 
     <!-- items list -->
-        <h3 class="newitem" id="songList">
+    <ul id="songList">
+
+    </ul>
 
 </div>
 
   <script>
 
+    getList()
     //selecting form for list
     let listForm = document.querySelector('#song-list')
     let songInput = document.querySelector('#add-songs')
@@ -56,23 +59,27 @@
 
   //get all items for the specific list
   //function to display songs in list
-  function getList(items) {
-    fetch('/api/list/:id')
+  function getList() {
+    let options = {
+          method: 'get', //post because we have to send song in input
+          credentials: 'include',
+          headers: {
+              'content-type': 'application/json'
+          }
+      }
+    fetch('/api/list', options)
     .then(response => response.json())
-    .then(items => {
-      //creating a new element
-      let newItem = document.createElement('li')
-      //adding input value to new element
-      newItem.innerHTML = songInput.value
-      //selecting where item should be added in lists
-      let listItem = document.querySelector('#songList')
-      //appending value to list
-      listItem.appendChild(newItem)
+    .then(list => {
+
+      console.log(list)
+
+
+
     })
   }
 
   //function to post item in API-database
-  function addItem(items) {
+  function addItem() {
     //Set the options for the fetch() method
     //parameters documentation: https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#
     let options = {
@@ -95,8 +102,14 @@
         .then(response => {
               if (response.status == 'OK') {
               console.log('song is added')
+              let newItem = document.createElement('li')
+              //adding input value to new element
+              newItem.innerHTML = songInput.value
+              //selecting where item should be added in lists
+              let listItem = document.querySelector('#songList')
+              //appending value to list
+              listItem.appendChild(newItem)
               //calling frontend function
-              getList(items)
 
               } else {
               //or send error message
